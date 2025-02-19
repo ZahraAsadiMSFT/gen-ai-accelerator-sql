@@ -53,7 +53,8 @@ Defines the **Azure Timer Trigger**, which runs the function **once per day**:
 
 ## How to Test the Index
 
-### Test Full-Text Search (Keyword Search on ITEM#)**
+### **1. Test Full-Text Search (Keyword Search on ITEM#)**
+To perform a **keyword search** for an exact `ITEM#`, send the following JSON request:
 ```json
 {
   "search": "3260",
@@ -61,11 +62,11 @@ Defines the **Azure Timer Trigger**, which runs the function **once per day**:
   "searchMode": "any"
 }
 ```
-Test Semantic Search (Semantic Search on description)**
-Expected behavior after running test-semantic.py: This should return the **exact match** for `ITEM# = 3260`.
+**Expected behavior:** The query should return the **exact match** for `ITEM# = 3260`.
 
-
-Expected behavior: This should return the **top 5 most relevant matches** based on vector similarity.
+### **2. Test Semantic Search (Vector Search on Description)**
+To perform a **semantic search** using OpenAI embeddings, run the following script: test-semantic-search.py
+**Expected behavior:** This query should return the **top 5 most relevant matches** based on vector similarity.
 
 ## Deployment Steps
 1. **Deploy the Azure Function:**
