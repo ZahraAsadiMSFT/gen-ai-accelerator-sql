@@ -8,7 +8,7 @@ Each field in Azure AI Search has different capabilities. Here’s what they mea
 
 | Property      | What It Does? |
 |--------------|--------------|
-| **key**      | Uniquely identifies each document. (✅ Only one field can be True—in this case, `ITEM#`.) |
+| **key**      | Uniquely identifies each document. (Only one field can be True—in this case, `ITEM#`.) |
 | **searchable** | Allows full-text search (used for text-based fields like `description`). |
 | **filterable** | Allows filtering in queries (used for structured fields like `status`, `commodity`). |
 | **sortable** | Allows sorting query results (useful for numbers, dates, or categories). |
@@ -61,7 +61,7 @@ curl -X GET "https://yoursearchservice.search.windows.net/indexes/items-index?ap
 ```
 If successful, this will return the **index schema**, confirming that all fields are correctly set.
 
-### **2. Test Full-Text Search (Keyword Search on ITEM#)**
+### Test Full-Text Search (Keyword Search on ITEM#)**
 ```json
 {
   "search": "3260",
@@ -69,6 +69,7 @@ If successful, this will return the **index schema**, confirming that all fields
   "searchMode": "any"
 }
 ```
+Test Semantic Search (Semantic Search on description)**
 Expected behavior after running test-semantic.py: This should return the **exact match** for `ITEM# = 3260`.
 
 
