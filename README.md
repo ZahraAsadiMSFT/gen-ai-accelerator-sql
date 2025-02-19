@@ -53,14 +53,6 @@ Defines the **Azure Timer Trigger**, which runs the function **once per day**:
 
 ## How to Test the Index
 
-### **1. Verify Index Creation**
-Run the following request in **Postman** or **cURL** to check if the index was created correctly:
-```bash
-curl -X GET "https://yoursearchservice.search.windows.net/indexes/items-index?api-version=2023-07-01" \
--H "api-key: your_azure_search_api_key"
-```
-If successful, this will return the **index schema**, confirming that all fields are correctly set.
-
 ### Test Full-Text Search (Keyword Search on ITEM#)**
 ```json
 {
