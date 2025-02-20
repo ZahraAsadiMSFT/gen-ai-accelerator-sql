@@ -8,20 +8,52 @@ INDEX_NAME = "items-index"
 index_schema = {
     "name": INDEX_NAME,
     "fields": [
-        {"name": "ITEM#", "type": "Edm.String", "key": True, "filterable": True, "sortable": True, "facetable": True},
-        {"name": "description", "type": "Edm.String", "searchable": True},
+        {"name": "ITEMNUM", "type": "Edm.String", "key": True, "filterable": True, "sortable": True, "facetable": True},
+        {"name": "DESCRIPTION", "type": "Edm.String", "searchable": True},
         {"name": "vector_embedding", "type": "Collection(Edm.Single)", "searchable": True, "vectorSearchDimensions": 1536, "vectorSearchAlgorithm": "hnsw"},
-        {"name": "status", "type": "Edm.String", "filterable": True, "sortable": True, "facetable": True},
-        {"name": "commodity", "type": "Edm.String", "filterable": True, "sortable": True, "facetable": True},
-        {"name": "CurrentBalance", "type": "Edm.Int32", "sortable": True}
+        {"name": "ITEMID", "type": "Edm.Int32", "sortable": True, "filterable": True},
+        {"name": "totalOnhand", "type": "Edm.Int32", "sortable": True, "filterable": True},
+        {"name": "URL", "type": "Edm.String", "searchable": True},
+        {"name": "partition_id", "type": "Edm.Int32", "filterable": True, "sortable": True},
+
+        # itemspec_array - Stores multiple specifications for an item
+        {
+            "name": "itemspec_array",
+            "type": "Collection(Edm.ComplexType)",
+            "fields": [
+                {"name": "ALNVALUE", "type": "Edm.String", "searchable": True},
+                {"name": "NUMVALUE", "type": "Edm.Int32", "filterable": True}  
+            ]
+        },
+
+        # plusitemterm_array - Stores term IDs related to the item
+        {
+            "name": "plusitemterm_array",
+            "type": "Collection(Edm.ComplexType)",
+            "fields": [
+                {"name": "TERMID", "type": "Edm.String", "searchable": True}
+            ]
+        },
+
+        # invvendor_array - Stores vendor details for the item
+        {
+            "name": "invvendor_array",
+            "type": "Collection(Edm.ComplexType)",
+            "fields": [
+                {"name": "VENDOR", "type": "Edm.String", "filterable": True, "facetable": True},
+                {"name": "MANUFACTURER", "type": "Edm.String", "filterable": True, "facetable": True},
+                {"name": "MODELNUM", "type": "Edm.String", "searchable": True},
+                {"name": "CATALOGCODE", "type": "Edm.String", "searchable": True}
+            ]
+        }
     ],
     "semantic": {
         "configurations": [
             {
                 "name": "semantic-config",
                 "prioritizedFields": {
-                    "titleField": {"fieldName": "description"},
-                    "contentFields": [{"fieldName": "description"}]
+                    "titleField": {"fieldName": "DESCRIPTION"},
+                    "contentFields": [{"fieldName": "DESCRIPTION"}]
                 }
             }
         ]
