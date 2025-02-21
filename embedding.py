@@ -1,4 +1,3 @@
-import openai
 import requests
 import os
 import json
@@ -7,7 +6,10 @@ from azure.storage.blob import BlobServiceClient
 # Load environment variables
 AZURE_SEARCH_API_KEY = os.getenv("AZURE_SEARCH_API_KEY")
 AZURE_SEARCH_ENDPOINT = os.getenv("AZURE_SEARCH_ENDPOINT")
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+AOAI_URL = os.getenv("AOAI_URL")  # Your OpenAI/AOAI endpoint
+AOAI_KEY = os.getenv("AOAI_KEY")  # Your OpenAI API key
+AOAI_DEPLOYMENT_NAME = os.getenv("AOAI_DEPLOYMENT_NAME")  # Deployed model name
+AOAI_API_VERSION = "2023-07-01-preview"  # Change if needed
 BLOB_CONNECTION_STRING = os.getenv("BLOB_CONNECTION_STRING")
 BLOB_CONTAINER_NAME = os.getenv("BLOB_CONTAINER_NAME")
 INDEX_NAME = "items-index"
@@ -17,17 +19,24 @@ BATCH_SIZE = 500  # Azure AI Search limit is 1000 docs per batch
 blob_service_client = BlobServiceClient.from_connection_string(BLOB_CONNECTION_STRING)
 container_client = blob_service_client.get_container_client(BLOB_CONTAINER_NAME)
 
-# Function to generate OpenAI embeddings
+# Function to generate embeddings using your OpenAI/AOAI model
 def generate_embedding(text):
+    base_url = f"{AOAI_URL}/openai/deployments/{AOAI_DEPLOYMENT_NAME}/embeddings?api-version={AOAI_API_VERSION}"
+    headers = {
+        "Content-Type": "application/json",
+        "api-key": AOAI_KEY
+    }
+    body = {"input": text}
+    
     try:
-        response = openai.Embedding.create(
-            input=text,
-            model="text-embedding-ada-002"
-        )
-        return response["data"][0]["embedding"]
+        response = requests.post(url=base_url, headers=headers, json=body)
+        response.raise_for_status()
+        embedding = response.json()
+        return embedding["data"][0]["embedding"]
+    
     except Exception as e:
         print(f"Error generating embedding: {e}")
-        return [0.0] * 1536  # Fallback to zero vector if embedding fails
+        return [0.0] * 1536  # Fallback zero vector
 
 # Function to read and process JSON files from Blob Storage
 def process_json_files():
